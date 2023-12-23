@@ -1,0 +1,26 @@
+{
+  "name": "goerlis-indexer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "start:syncer": "DEBUG='*' ts-node ./src/boot_syncer.ts"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.3.2",
+    "@typechain/ethers-v6": "^0.5.0",
+    "debug": "^4.3.4",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.7.1",
+    "pg": "^8.11.3",
+    "ts-node": "^10.9.1",
+    "typechain": "^8.3.1",
+    "typeorm": "^0.3.17",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.8",
+    "@types/node": "20",
+    "@types/pg": "^8.10.2"
+  }
+}

@@ -1,0 +1,10 @@
+node_modules
+src/typechain
+.env.mainnet
+dist
+.DS_Store
+.idea
+.prettierrc
+*.csv
+*.http
+.env
