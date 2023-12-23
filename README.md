@@ -18,11 +18,8 @@ The community-driven indexer for Goerlis Protocol.
 
 ```bash
 yarn
-yarn gen:types # Generate TypeChain from abis
 yarn init:db # Init database schema
 yarn start:syncer
-yarn start:collector
-yarn start:api
 ```
 
 ## License

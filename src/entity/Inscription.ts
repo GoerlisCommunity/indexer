@@ -1,8 +1,14 @@
-import { BaseEntity, Column, ColumnOptions, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, In, Index, PrimaryGeneratedColumn } from "typeorm";
 import { evmByteColumn } from "./column";
 
-@Entity()
-@Index(["transactionHash", "txIndex"], { unique: true })
+export enum Subprotocol {
+    GRC20
+}
+
+export enum ContentType {
+    APPLICATION_JSON
+}
+
 export abstract class Inscription extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
@@ -22,14 +28,20 @@ export abstract class Inscription extends BaseEntity {
     blockNumber: number
 
     @Column()
-    contentType: string
+    @Index()
+    subprotocol: Subprotocol
 
-    @Column({ type: "jsonb" })
-    content: {}
+    @Column()
+    contentType: ContentType
+
+    @Column()
+    content: string
 }
 
 @Entity()
-export class GoerliInscription extends Inscription {}
+export class GoerliInscription extends Inscription {
+}
 
 @Entity()
-export class MainnetInscription extends Inscription {}
+export class MainnetInscription extends Inscription {
+}

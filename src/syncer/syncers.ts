@@ -1,9 +1,14 @@
-import { TxSyncer } from "./TxSyncer";
+import { TxSyncer, TxSyncerConfig } from "./TxSyncer";
 import { GoerliBlock, MainnetBlock } from "../entity/EthBlock";
 import { GoerliTransaction, MainnetTransaction } from "../entity/EthTransaction";
 import { EntityManager } from "typeorm";
+import { ChainConfig } from "../config";
 
 export class GoerliTxSyncer extends TxSyncer<GoerliBlock, GoerliTransaction> {
+    constructor(public config: TxSyncerConfig, public chainConfig: ChainConfig) {
+        super("GoerliTxSyncer", config, chainConfig);
+    }
+
     createBlock(): GoerliBlock {
         return new GoerliBlock()
     }
@@ -32,6 +37,11 @@ export class GoerliTxSyncer extends TxSyncer<GoerliBlock, GoerliTransaction> {
 }
 
 export class MainnetTxSyncer extends TxSyncer<MainnetBlock, MainnetTransaction> {
+
+    constructor(public config: TxSyncerConfig, public chainConfig: ChainConfig) {
+        super("MainnetTxSyncer", config, chainConfig);
+    }
+
     createBlock(): MainnetBlock {
         return new MainnetBlock()
     }

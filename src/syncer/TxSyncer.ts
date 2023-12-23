@@ -5,11 +5,10 @@ import { EntityManager } from "typeorm"
 import { StaticJsonRpcProvider } from "../StaticJsonRpcProvider";
 import { EthBlock } from "../entity/EthBlock";
 import { EthTransaction } from "../entity/EthTransaction";
+import { ChainConfig } from "../config";
 
 export interface TxSyncerConfig {
     interval: number
-    confirmation: number
-    startBlock: number,
     rpc: StaticJsonRpcProvider
 }
 
@@ -19,7 +18,7 @@ export abstract class TxSyncer<B extends EthBlock, T extends EthTransaction> {
     ckpt: Checkpoint
     shutdown = true
 
-    constructor(public tag: string, public config: TxSyncerConfig) {
+    constructor(public tag: string, public config: TxSyncerConfig, public chainConfig: ChainConfig) {
         this.log = debug(`indexer:syncer:${tag}:log`)
         this.log.log = console.log
         this.err = debug(`indexer:syncer:${tag}:err`)
@@ -33,7 +32,7 @@ export abstract class TxSyncer<B extends EthBlock, T extends EthTransaction> {
             } else {
                 this.ckpt = new Checkpoint()
                 this.ckpt.ckpt = this.tag
-                this.ckpt.blocknumber = this.config.startBlock
+                this.ckpt.blocknumber = this.chainConfig.startBlock
             }
         }
         return this.ckpt.blocknumber
@@ -58,13 +57,19 @@ export abstract class TxSyncer<B extends EthBlock, T extends EthTransaction> {
     abstract saveTxs(t: T[], man: EntityManager): Promise<void>
 
     async start() {
-        this.log(`Started`)
+        this.log(`Detect network`)
         this.shutdown = false
+        const network = await this.config.rpc.getNetwork()
+        if (network.chainId != BigInt(this.chainConfig.chainId)) {
+            this.err(`Invalid network. Expected chain id ${this.chainConfig.chainId}, actual ${network.chainId}`)
+            return
+        }
         while (!this.shutdown) {
             try {
                 const currentBlock = await this.getCurrentBlock()
                 const blockNum = await this.config.rpc.getBlockNumber()
-                if (blockNum > currentBlock + this.config.confirmation) {
+                if (blockNum > currentBlock + this.chainConfig.confirmation) {
+                    this.log(`Fetching block ${currentBlock}`)
                     const block = (await this.config.rpc.getBlock(currentBlock, true))!
                     const txs = block.transactions
 
@@ -98,7 +103,7 @@ export abstract class TxSyncer<B extends EthBlock, T extends EthTransaction> {
                         await this.saveCurrentBlock(currentBlock + 1, dataSource.manager)
                     }
                 }
-                if (blockNum - (await this.getCurrentBlock() + this.config.confirmation) <= 0) {
+                if (blockNum - (await this.getCurrentBlock() + this.chainConfig.confirmation) <= 0) {
                     await delay(this.config.interval)
                 }
             } catch (e) {

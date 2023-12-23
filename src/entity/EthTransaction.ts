@@ -1,13 +1,12 @@
 import { BaseEntity, Column, ColumnOptions, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 import { evmByteColumn } from "./column";
 
-@Index(["transactionHash", "txIndex"], { unique: true })
 export class EthTransaction extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column(evmByteColumn)
-    @Index()
+    @Index({ unique: true })
     transactionHash: string
 
     @Column()
@@ -25,7 +24,9 @@ export class EthTransaction extends BaseEntity {
 }
 
 @Entity()
-export class GoerliTransaction extends EthTransaction {}
+export class GoerliTransaction extends EthTransaction {
+}
 
 @Entity()
-export class MainnetTransaction extends EthTransaction {}
+export class MainnetTransaction extends EthTransaction {
+}

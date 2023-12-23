@@ -1,6 +1,7 @@
 import { err, init, log } from "./index";
-import { GoerliTxSyncer } from "./syncer/syncers";
+import { GoerliTxSyncer, MainnetTxSyncer } from "./syncer/syncers";
 import { StaticJsonRpcProvider } from "./StaticJsonRpcProvider";
+import { goerliConfig, mainnetConfig } from "./config";
 
 async function main() {
   log(`Goerlis Indexer https://github.com/GoerlisCommunity/indexer`)
@@ -8,12 +9,15 @@ async function main() {
   log(`Copyright (C) 2023 Goerlis Community Contributors`)
   await init()
 
-  new GoerliTxSyncer("GoerliSyncer", {
-    confirmation: 5,
+  new GoerliTxSyncer({
     interval: 1000,
-    startBlock: 10257602,
     rpc: new StaticJsonRpcProvider(process.env.RPC_GOERLI)
-  }).start()
+  }, goerliConfig).start()
+
+  new MainnetTxSyncer({
+    interval: 1000,
+    rpc: new StaticJsonRpcProvider(process.env.RPC_MAINNET)
+  }, mainnetConfig).start()
 }
 
 main().catch(e => {

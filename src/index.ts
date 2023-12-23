@@ -40,7 +40,6 @@ export const dataSource = new DataSource(databaseConfig);
 export const log = debug(`indexer:syncer:log`);
 log.log = console.log;
 export const err = debug(`indexer:syncer:err`);
-export let shutdown = false;
 
 export async function delay(ms: number) {
     return new Promise((r) => setTimeout(r, ms));
