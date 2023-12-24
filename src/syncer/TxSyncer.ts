@@ -48,9 +48,9 @@ export abstract class TxSyncer<B extends EthBlock, T extends EthTransaction> {
             .execute()
     }
 
-    abstract createBlock() : B
+    abstract createBlock(): B
 
-    abstract createTx() : T
+    abstract createTx(): T
 
     abstract saveBlock(b: B, man: EntityManager): Promise<void>
 
@@ -69,7 +69,7 @@ export abstract class TxSyncer<B extends EthBlock, T extends EthTransaction> {
                 const currentBlock = await this.getCurrentBlock()
                 const blockNum = await this.config.rpc.getBlockNumber()
                 if (blockNum > currentBlock + this.chainConfig.confirmation) {
-                    this.log(`Fetching block ${currentBlock}`)
+                    this.log(`Fetching block ${currentBlock}, current ${blockNum}, diff ${blockNum - currentBlock}`)
                     const block = (await this.config.rpc.getBlock(currentBlock, true))!
                     const txs = block.transactions
 

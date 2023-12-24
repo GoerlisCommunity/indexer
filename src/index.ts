@@ -11,7 +11,7 @@ types.setTypeParser(types.builtins.NUMERIC, (val) => BigInt(val));
 // Only for block number
 types.setTypeParser(types.builtins.INT8, (val) => Number(val));
 // for address type
-types.setTypeParser(types.builtins.BYTEA, (val) => `0x${val.slice(2)}`);
+// types.setTypeParser(types.builtins.BYTEA, (val) => `0x${val.slice(2)}`);
 
 configDotenv();
 

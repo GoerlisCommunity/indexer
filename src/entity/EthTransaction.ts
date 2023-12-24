@@ -1,18 +1,18 @@
 import { BaseEntity, Column, ColumnOptions, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
-import { evmByteColumn } from "./column";
+import { evmAddressColumn, evmByteColumn } from "./column";
 
 export class EthTransaction extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column(evmByteColumn)
+    @Column(evmAddressColumn)
     @Index({ unique: true })
     transactionHash: string
 
     @Column()
     txIndex: number
 
-    @Column(evmByteColumn)
+    @Column(evmAddressColumn)
     address: string
 
     @Column(evmByteColumn)

@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, In, Index, PrimaryGeneratedColumn } from "typeorm";
-import { evmByteColumn } from "./column";
+import { evmAddressColumn, evmByteColumn } from "./column";
 
 export enum Subprotocol {
     GRC20
@@ -13,14 +13,14 @@ export abstract class Inscription extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column(evmByteColumn)
+    @Column(evmAddressColumn)
     @Index()
     transactionHash: string
 
     @Column()
     txIndex: number
 
-    @Column(evmByteColumn)
+    @Column(evmAddressColumn)
     address: string
 
     @Column({ type: "bigint" })

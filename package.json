@@ -5,6 +5,7 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "start:syncer": "DEBUG='*' ts-node ./src/boot_syncer.ts",
+    "start:collector": "DEBUG='*' ts-node ./src/boot_collector.ts",
     "init:db": "DEBUG='*' ts-node ./src/init_db.ts"
   },
   "dependencies": {
